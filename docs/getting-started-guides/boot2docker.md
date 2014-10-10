@@ -20,6 +20,7 @@ docker run -p 10250:10250 -v /var/run/docker.sock:/var/run/docker.sock kubernete
 ```
 export KUBERNETES_MASTER=$(boot2docker ip):8080
 kubecfg list /pods
-kubecfg -p 8080:80 run nginx 1 kube-nginx
+kubecfg -p 8181:80 run nginx 1 kube-nginx
 kubecfg list /pods
+curl $(boot2docker ip):8181
 ```
