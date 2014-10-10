@@ -63,6 +63,7 @@ readonly LOCAL_OUTPUT_IMAGE_STAGING="${LOCAL_OUTPUT_ROOT}/images"
 readonly REMOTE_OUTPUT_ROOT="/go/src/${KUBE_GO_PACKAGE}/_output"
 readonly REMOTE_OUTPUT_DIR="${REMOTE_OUTPUT_ROOT}/build"
 readonly DOCKER_MOUNT_ARGS=(--volume "${LOCAL_OUTPUT_BUILD}:${REMOTE_OUTPUT_DIR}")
+readonly BOOT2DOCKER=${BOOT2DOCKER:-n}
 
 readonly KUBE_CLIENT_BINARIES=(
   kubecfg
@@ -112,7 +113,7 @@ function kube::build::verify_prereqs() {
     return 1
   fi
 
-  if kube::build::is_osx; then
+  if kube::build::is_boot2docker; then
     if [[ -z "$(which boot2docker)" ]]; then
       echo "It looks like you are running on Mac OS X and boot2docker can't be found." >&2
       echo "See: https://docs.docker.com/installation/mac/" >&2
@@ -291,6 +292,7 @@ function kube::build::run_image() {
   tar czf "${build_context_base}/kube-bins.tar.gz" \
     -C "${LOCAL_OUTPUT_ROOT}/build/linux/amd64" \
     "${KUBE_RUN_IMAGES[@]}"
+  cp hack/cluster-pod.yaml "${build_context_base}/"
   cp -R build/run-images/base/* "${build_context_base}/"
   kube::build::docker_build "${KUBE_RUN_IMAGE_BASE}" "${build_context_base}"
 
