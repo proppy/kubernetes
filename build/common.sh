@@ -292,15 +292,14 @@ function kube::build::run_image() {
   tar czf "${build_context_base}/kube-bins.tar.gz" \
     -C "${LOCAL_OUTPUT_ROOT}/build/linux/amd64" \
     "${KUBE_RUN_IMAGES[@]}"
-  cp hack/cluster-pod.yaml "${build_context_base}/"
   cp -R build/run-images/base/* "${build_context_base}/"
   kube::build::docker_build "${KUBE_RUN_IMAGE_BASE}" "${build_context_base}"
 
   local b
-  for b in "${KUBE_RUN_IMAGES[@]}" ; do
+  for b in "${KUBE_RUN_IMAGES[@]}" bootstrap ; do
     local sub_context_dir="${build_context_base}-$b"
     mkdir -p "${sub_context_dir}"
-    cp -R build/run-images/$b/* "${sub_context_dir}/"
+    cp -a build/run-images/$b/* "${sub_context_dir}/"
     kube::build::docker_build "${KUBE_RUN_IMAGE_BASE}-$b" "${sub_context_dir}"
   done
 }
