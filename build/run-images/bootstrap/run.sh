@@ -17,6 +17,8 @@
 # see https://github.com/docker/docker/issues/8395
 HOST_IP=$(ip route show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }')
 
+KUBELET_IP=$(hostname -i)
+
 cat <<EOF > pod.yaml
 version: v1beta1
 id: cluster-pod
@@ -37,7 +39,7 @@ containers:
         hostPort: 8080
         containerPort: 8080
         protocol: TCP
-    command: ["/kubernetes/apiserver", "-v=5", "-address=0.0.0.0", "-etcd_servers=http://127.0.0.1:4001", "-machines=${HOST_IP}"]
+    command: ["/kubernetes/apiserver", "-v=5", "-address=0.0.0.0", "-etcd_servers=http://127.0.0.1:4001", "-machines=${KUBELET_IP}"]
   - name: controller-manager
     image: kubernetes
     imagePullPolicy: never
@@ -51,4 +53,4 @@ containers:
     imagePullPolicy: never
     command: ["/kubernetes/scheduler", "-v=5", "-master=127.0.0.1:8080"]
 EOF
-./kubelet -v=5 -address=0.0.0.0 -hostname_override=${HOST_IP} -etcd_servers=http://${HOST_IP}:4001 -config pod.yaml
+./kubelet -v=5 -address=0.0.0.0 -hostname_override=${KUBELET_IP} -etcd_servers=http://${HOST_IP}:4001 -config pod.yaml

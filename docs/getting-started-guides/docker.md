@@ -26,7 +26,7 @@ BUILD_RUN_IMAGES=y ./build/make-run-image.sh
 ### Bootstrap the cluster
 
 ```
-docker run -p 10250:10250 -v /var/run/docker.sock:/var/run/docker.sock kubernetes-bootstrap
+docker run -v /var/run/docker.sock:/var/run/docker.sock kubernetes-bootstrap
 ```
 
 ### Manage your pods
