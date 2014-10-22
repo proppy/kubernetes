@@ -21,4 +21,3 @@ WORKDIR /kubernetes
 
 # Upload Kubernetes server binaries
 ADD kube-bins.tar.gz /kubernetes
-
