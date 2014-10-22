@@ -299,7 +299,7 @@ function kube::build::run_image() {
   for b in "${KUBE_RUN_IMAGES[@]}" bootstrap ; do
     local sub_context_dir="${build_context_base}-$b"
     mkdir -p "${sub_context_dir}"
-    cp -a build/run-images/$b/* "${sub_context_dir}/"
+    cp build/run-images/$b/* "${sub_context_dir}/"
     kube::build::docker_build "${KUBE_RUN_IMAGE_BASE}-$b" "${sub_context_dir}"
   done
 }
