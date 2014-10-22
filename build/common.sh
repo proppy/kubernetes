@@ -63,7 +63,6 @@ readonly LOCAL_OUTPUT_IMAGE_STAGING="${LOCAL_OUTPUT_ROOT}/images"
 readonly REMOTE_OUTPUT_ROOT="/go/src/${KUBE_GO_PACKAGE}/_output"
 readonly REMOTE_OUTPUT_DIR="${REMOTE_OUTPUT_ROOT}/build"
 readonly DOCKER_MOUNT_ARGS=(--volume "${LOCAL_OUTPUT_BUILD}:${REMOTE_OUTPUT_DIR}")
-readonly BOOT2DOCKER=${BOOT2DOCKER:-n}
 
 readonly KUBE_CLIENT_BINARIES=(
   kubecfg
@@ -113,7 +112,7 @@ function kube::build::verify_prereqs() {
     return 1
   fi
 
-  if kube::build::is_boot2docker; then
+  if kube::build::is_osx; then
     if [[ -z "$(which boot2docker)" ]]; then
       echo "It looks like you are running on Mac OS X and boot2docker can't be found." >&2
       echo "See: https://docs.docker.com/installation/mac/" >&2
