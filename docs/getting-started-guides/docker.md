@@ -6,9 +6,9 @@
 - Install [boot2docker](http://boot2docker.io/) 
 ```
 boot2docker up
-export DOCKER_HOST_IP=$(boot2docker ip)
+$(boot2docker shellinit)
+export DOCKER_HOST=$(boot2docker ip 2>/dev/null)
 export KUBERNETES_MASTER=$DOCKER_HOST_IP:8080
-export BOOT2DOCKER=y
 ```
 
 #### With local docker daemon
@@ -28,6 +28,10 @@ BUILD_RUN_IMAGES=y ./build/make-run-image.sh
 ```
 docker run -v /var/run/docker.sock:/var/run/docker.sock kubernetes-bootstrap
 ```
+
+### Get kubernetes release
+curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.4.1/kubernetes.tar.gz | tar xvzf -
+export PATH=/path/to/kubernetes/platforms/os/arch:$PATH
 
 ### Manage your pods
 ```
