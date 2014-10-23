@@ -1,5 +1,10 @@
 ## Getting started locally with docker
 
+This method runs a local kubernetes cluster self hosted in Docker
+itself. The Kubelet is started in a container with access to the
+Docker API. It then launches a pod of containers that comprise the
+rest of a local-only kubernetes cluster.
+
 ### Pre-requisites
 
 #### With boot2docker
@@ -7,7 +12,7 @@
 ```
 boot2docker up
 $(boot2docker shellinit)
-export DOCKER_HOST=$(boot2docker ip 2>/dev/null)
+export DOCKER_HOST_IP=$(boot2docker ip 2>/dev/null)
 export KUBERNETES_MASTER=$DOCKER_HOST_IP:8080
 ```
 
@@ -20,7 +25,7 @@ export KUBERNETES_MASTER=$DOCKER_HOST_IP:8080
 ### Build the kubernetes docker images
 
 ```
-BUILD_RUN_IMAGES=y ./build/make-run-image.sh 
+./build/make-run-images.sh 
 ```
 
 ### Bootstrap the cluster
@@ -29,9 +34,11 @@ BUILD_RUN_IMAGES=y ./build/make-run-image.sh
 docker run -v /var/run/docker.sock:/var/run/docker.sock kubernetes-bootstrap
 ```
 
-### Get kubernetes release
-curl -L https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v0.4.1/kubernetes.tar.gz | tar xvzf -
-export PATH=/path/to/kubernetes/platforms/os/arch:$PATH
+### Build kubernetes clean
+
+```
+./build/make-client.sh
+```
 
 ### Manage your pods
 ```
