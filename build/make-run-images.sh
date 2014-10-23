@@ -24,6 +24,7 @@ set -o nounset
 set -o pipefail
 
 KUBE_ROOT=$(dirname "${BASH_SOURCE}")/..
+KUBE_BUILD_RUN_IMAGES=y
 source "$KUBE_ROOT/build/common.sh"
 
 kube::build::verify_prereqs
